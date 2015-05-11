@@ -1,0 +1,66 @@
+<app-header>
+
+  <h1>
+    <strong>Riot</strong> Tag Syntax Checker
+    <div>
+      <button class={ active: active == 'source' } onclick={ showSource }>Source</button>
+      <button class={ active: active == 'result' } onclick={ showResult }>Result</button>
+    </div>
+  </h1>
+
+  <script>
+    this.active = opts.active
+
+    showSource (e) {
+      this.active = 'source'
+      this.trigger('showSource')
+    }
+    showResult (e) {
+      this.active = 'result'
+      this.trigger('showResult')
+    }
+  </script>
+
+  <style scoped>
+    :scope {
+      display: block;
+      padding: 2em;
+      background: #ddd;
+      color: #888;
+    }
+    h1 {
+      font-size: 130%;
+      font-weight: normal;
+      margin: 0;
+    }
+    div {
+      float: right;
+      font-size: 70%;
+    }
+    button {
+      border: 2px solid #fff;
+      background: #fff;
+      color: #f04;
+      padding: .2em 1em;
+    }
+    button + button {
+      margin-left: -.5em;
+    }
+    button:focus {
+      outline: none;
+    }
+    button.active {
+      background: #f04;
+      color: #fff;
+    }
+    button:first-child {
+      border-top-left-radius: 1em;
+      border-bottom-left-radius: 1em;
+    }
+    button:last-child {
+      border-top-right-radius: 1em;
+      border-bottom-right-radius: 1em;
+    }
+  </style>
+
+</app-header>

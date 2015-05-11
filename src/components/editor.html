@@ -1,0 +1,37 @@
+<editor>
+
+  <textarea name="source" onkeyup={ adjust } onchange={ change }>{ opts.source }</textarea>
+
+  <script>
+    change (e) {
+      this.trigger('change', this.source.value)
+    }
+    adjust () {
+      var ta = this.source
+      if (ta.scrollHeight > ta.clientHeight)
+        ta.style.height = ta.scrollHeight + "px"
+    }
+    this.on('mount', function() {
+      this.adjust()
+    })
+  </script>
+
+  <style scoped>
+    :scope {
+      display: block;
+      font-family: monospace;
+      border: 1px solid #ccc;
+      border-radius: .5em;
+      margin: 1em;
+    }
+    textarea {
+      width: 100%;
+      padding: 1em;
+      border: none;
+      margin: 0;
+      border-radius: .5em;
+      box-sizing: border-box;
+    }
+  </style>
+
+</editor>

@@ -1,0 +1,32 @@
+{
+  "name": "riot-checker",
+  "version": "0.0.1",
+  "description": "Syntax Checker for Riot.js",
+  "homepage": "https://github.com/cognitom/riot-checker",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cognitom/riot-checker.git"
+  },
+  "author": "Tsutomu Kawamura <cognitom@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "riot"
+  ],
+  "devDependencies": {
+    "browser-sync": "^2.0.0",
+    "browserify": "^8.1.1",
+    "gulp": "^3.8.10",
+    "gulp-sourcemaps": "^1.3.0",
+    "gulp-streamify": "^0.0.5",
+    "gulp-uglify": "^1.1.0",
+    "riot": "cognitom/riotjs#syntax-checker",
+    "riotify": "^0.0.9",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.0.0"
+  },
+  "main": "dist/riot-bootstrap.js",
+  "scripts": {
+    "build": "gulp",
+    "start": "gulp watch"
+  }
+}
