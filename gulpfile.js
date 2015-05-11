@@ -26,7 +26,7 @@ gulp.task('browserify', function() {
     .pipe(source(path.basename($.app)))
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
-    //.pipe(streamify(uglify()))
+    .pipe(streamify(uglify()))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest($.dist))
 })
