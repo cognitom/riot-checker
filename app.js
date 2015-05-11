@@ -2,37 +2,18 @@
 var riot     = require('riot')
 var analizer = require('riot/lib/server/analyzer')
                require('./components/app-header.html')
+               require('./components/app-footer.html')
                require('./components/editor.html')
                require('./components/checker.html')
 
-var STORAGE_KEY = 'RIOT_CHECKER_SOURCE'
-var SOURCE_SAMPLE = [
-  "// A sample tag file with some errors",
-  "var riot = require('riot')",
-  "",
-  "<valid-tag>",
-  "  <h1>{ title }</h1>",
-  "  <p>{ message }</p>",
-  "<invalid-flagment",
-  "  this.title = 'Hello world!'",
-  "  this.message = 'I am hungry...'",
-  "</valid-tag>",
-  "",
-  "<invalid-t",
-  "  <h1>{ title }</h1>",
-  "  <p>{ message }</p>",
-  "",
-  "  this.title = 'Hello world!'",
-  "  this.message = 'I am hungry...'",
-  "</invalid-t",
-  "",
-  "console.log('end of file')"
-].join('\n')
+var STORAGE_KEY   = 'RIOT_CHECKER_SOURCE'
+var SOURCE_SAMPLE = require('./source-sample')
 
 function mount(selector, tag, opts, listeners) {
   var dom = document.querySelector(selector)
   var container = riot.mount(dom, tag, opts)[0]
   dom.setAttribute('riot-tag', tag)
+  if (!listeners) return
   Object.keys(listeners).map(function(key) {
     container.on(key, listeners[key])
   })
@@ -48,6 +29,9 @@ var view = {
       showResult: function() { view.checker() }
     })
   },
+  footer: function(active) {
+    mount('#footer', 'app-footer')
+  },
   editor: function() {
     mount('#container', 'editor', {
       source: source
@@ -61,25 +45,16 @@ var view = {
   checker: function() {
     var results = analizer(source)
     mount('#container', 'checker', {
-      source: source,
       results: results
-    }, {
-      back: function() {
-        view.editor()
-      }
     })
   }
 }
 
-if (source) {
-  view.header('result')
-  view.checker()
-} else {
-  view.header('source')
-  view.editor()
-}
+view.header('result')
+view.footer()
+view.checker()
 
-},{"./components/app-header.html":4,"./components/checker.html":5,"./components/editor.html":6,"riot":3,"riot/lib/server/analyzer":2}],2:[function(require,module,exports){
+},{"./components/app-footer.html":4,"./components/app-header.html":5,"./components/checker.html":6,"./components/editor.html":7,"./source-sample":8,"riot":3,"riot/lib/server/analyzer":2}],2:[function(require,module,exports){
 /**
  * Syntax checker for Riot.js
  */
@@ -1312,6 +1287,13 @@ riot.mountTo = riot.mount
 
 },{}],4:[function(require,module,exports){
 var riot = require('riot');
+riot.tag('app-footer', '<p><a href="https://github.com/cognitom/riot-checker">GitHub</a></p>', 'app-footer , [riot-tag="app-footer"] { border-top: 1px solid #eee; display: block; padding: 1em; text-align: center; } app-footer a , [riot-tag="app-footer"] a { color: #aaa; } app-footer p , [riot-tag="app-footer"] p { margin: 0; font-size: 90%; }', function(opts) {
+
+
+});
+
+},{"riot":3}],5:[function(require,module,exports){
+var riot = require('riot');
 riot.tag('app-header', '<h1> <strong>Riot</strong> Tag Syntax Checker <div> <button class="{ active: active == \'source\' }" onclick="{ showSource }">Source</button> <button class="{ active: active == \'result\' }" onclick="{ showResult }">Result</button> </div> </h1>', 'app-header , [riot-tag="app-header"] { display: block; padding: 2em; background: #ddd; color: #888; } app-header h1 , [riot-tag="app-header"] h1 { font-size: 130%; font-weight: normal; margin: 0; } app-header div , [riot-tag="app-header"] div { float: right; font-size: 70%; } app-header button , [riot-tag="app-header"] button { border: 2px solid #fff; background: #fff; color: #f04; padding: .2em 1em; } app-header button + button , [riot-tag="app-header"] button + button { margin-left: -.5em; } app-header button:focus , [riot-tag="app-header"] button:focus { outline: none; } app-header button.active , [riot-tag="app-header"] button.active { background: #f04; color: #fff; } app-header button:first-child , [riot-tag="app-header"] button:first-child { border-top-left-radius: 1em; border-bottom-left-radius: 1em; } app-header button:last-child , [riot-tag="app-header"] button:last-child { border-top-right-radius: 1em; border-bottom-right-radius: 1em; }', function(opts) {
     this.active = opts.active
 
@@ -1326,14 +1308,14 @@ riot.tag('app-header', '<h1> <strong>Riot</strong> Tag Syntax Checker <div> <but
   
 });
 
-},{"riot":3}],5:[function(require,module,exports){
+},{"riot":3}],6:[function(require,module,exports){
 var riot = require('riot');
 riot.tag('checker', '<div each="{ opts.results }" class="{ type }"> <i>{ line.replace(\'L\', \'\') }</i>{ source }<span if="{ error }">{ error }</span> </div>', 'checker , [riot-tag="checker"] { display: block; font-family: monospace; border: 1px solid #ccc; border-radius: .5em; margin: 1em; } checker > :first-child , [riot-tag="checker"] > :first-child { border-top-left-radius: .5em; border-top-right-radius: .5em; } checker > :last-child , [riot-tag="checker"] > :last-child { border-bottom-left-radius: .5em; border-bottom-right-radius: .5em; } checker div , [riot-tag="checker"] div { background: #f0f0f0; padding: .1em 1em .1em 5em; } checker div.outside , [riot-tag="checker"] div.outside { background: #fff } checker div.template , [riot-tag="checker"] div.template { background: #fff0f0 } checker div.script , [riot-tag="checker"] div.script { background: #f0f0ff } checker div.style , [riot-tag="checker"] div.style { background: #f0fff0 } checker i , [riot-tag="checker"] i { margin-left: -5em; display: inline-block; width: 4em; text-align: right; padding-right: 1em; color: rgba(0,0,0,.5) } checker span , [riot-tag="checker"] span { display: block; padding: .2em .6em; margin: .2em 0; border-radius: .3em; background: #ff0044; color: #fff; }', function(opts) {
 
 
 });
 
-},{"riot":3}],6:[function(require,module,exports){
+},{"riot":3}],7:[function(require,module,exports){
 var riot = require('riot');
 riot.tag('editor', '<textarea name="source" onkeyup="{ adjust }" onchange="{ change }">{ opts.source }</textarea>', 'editor , [riot-tag="editor"] { display: block; font-family: monospace; border: 1px solid #ccc; border-radius: .5em; margin: 1em; } editor textarea , [riot-tag="editor"] textarea { width: 100%; padding: 1em; border: none; margin: 0; border-radius: .5em; box-sizing: border-box; }', function(opts) {
     this.change = function(e) {
@@ -1350,7 +1332,33 @@ riot.tag('editor', '<textarea name="source" onkeyup="{ adjust }" onchange="{ cha
   
 });
 
-},{"riot":3}]},{},[1])
+},{"riot":3}],8:[function(require,module,exports){
+module.exports = [
+  "// A sample tag file with some errors",
+  "// To change the source, click 'Source' button above.",
+  "",
+  "var riot = require('riot')",
+  "",
+  "<valid-tag>",
+  "  <h1>{ title }</h1>",
+  "  <p>{ message }</p>",
+  "<invalid-flagment",
+  "  this.title = 'Hello world!'",
+  "  this.message = 'I am hungry...'",
+  "</valid-tag>",
+  "",
+  "<invalid-t",
+  "  <h1>{ title }</h1>",
+  "  <p>{ message }</p>",
+  "",
+  "  this.title = 'Hello world!'",
+  "  this.message = 'I am hungry...'",
+  "</invalid-t",
+  "",
+  "console.log('end of file')"
+].join('\n')
+
+},{}]},{},[1])
 
 
 //# sourceMappingURL=app.js.map
