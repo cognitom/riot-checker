@@ -1,7 +1,7 @@
 <checker>
 
   <div each={ opts.results } class={ type }>
-    <i>{ line.replace('L', '') }</i>{ source }<span if={ error }>{ error }</span>
+    <i>{ line.replace('L', '') }</i><checker-source text={ source } /><span if={ error }>{ error }</span>
   </div>
 
   <style scoped>
@@ -47,3 +47,14 @@
   </style>
 
 </checker>
+
+<checker-source>
+
+  <script>
+    this.root.innerHTML = opts.text
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/ /g, '&nbsp;')
+  </script>
+
+</checker-source>
